@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>DiscordTranslator</title>
+	</head>
+	<body>
+		<h1>Discord絵文字会話用翻訳機</h1>
+		<hr>
+		<div id = "state"><span style="color: #FF0000;">ロード中……</span></div>
+		<h2>表示したい文章(英字のみ)</h2>
+		<input type="text" id="alp" value="">
+		<input type="button" onclick="translateR()" value="TDN to Name">
+		<h2>コピペ用文字列</h2>
+		<input type="text" id="name" value="">
+		<button class="but1" data-clipboard-target="#name">
+		
+		<hr>
+		<h2>作った動機</h2>
+		TDN式表記見ただけだと誰かわからないだろ！いい加減にしろ！<br>
+		
+		<script type="text/javascript">
+			var clipboard = new Clipboard('.but1');
+			clipboard.on('success', function(e) {
+			    e.clearSelection();
+			});
+		
+			var translatorR = new Object();
+			
+			function loadFile(fileName) {
+			   httpObj = new XMLHttpRequest();
+			   httpObj.open('GET',fileName+"?"+(new Date()).getTime(),true);
+			   httpObj.send(null);
+			   httpObj.onreadystatechange = function(){
+			      if ( (httpObj.readyState == 4) && (httpObj.status == 200) ){
+			         var str = httpObj.responseText;
+			         var arr = str.split("\r\n");
+
+			         for (i = 0; i < arr.length; i++)
+			         {
+			         	var ak = arr[i].split("	");
+			         	translatorL[ak[0]] = ak[1];
+			         	translatorR[ak[1]] = ak[0];
+			         }
+			         document.getElementById('state').innerHTML = "<span style=\"color: #00FF00;\">翻訳可能</span>";
+			      }
+			   }
+			}
+			loadFile("http://Nucleareal.github.io/DiscordAlphabetTranslator/dict.txt");
+			
+			translateR = function() {
+				let result = "";
+				
+				[].forEach.call(document.getElementById("alp").value, function(s){
+					result += translatorR[s];
+				});
+				
+				document.getElementById("name").value = result;
+			}
+		</script>
+	</body>
+</html>
