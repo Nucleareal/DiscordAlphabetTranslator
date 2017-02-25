@@ -10,52 +10,51 @@
 		<div id = "state"><span style="color: #FF0000;">ロード中……</span></div>
 		<h2>表示したい文章(英字のみ)</h2>
 		<input type="text" id="alp" value="">
-		<input type="button" onclick="translateR()" value="TDN to Name">
+		<input type="button" onclick="translateF()" value="翻訳">
 		<h2>コピペ用文字列</h2>
-		<input type="text" id="name" value="">
-		<button class="but1" data-clipboard-target="#name">
+		<input type="text" id="copystr" value="">
+		<button class="btn" type="button" name="button" data-clipboard-target="#copystr">コピー</button>
 		
 		<hr>
-		<h2>作った動機</h2>
-		TDN式表記見ただけだと誰かわからないだろ！いい加減にしろ！<br>
 		
+		<script type="text/javascript" src="./clipboard.min.js"></script>
 		<script type="text/javascript">
-			var clipboard = new Clipboard('.but1');
+			var translatorL = new Object();
+			
+			var clipboard = new Clipboard('.btn');
 			clipboard.on('success', function(e) {
-			    e.clearSelection();
+				//成功時の処理
 			});
-		
-			var translatorR = new Object();
 			
-			function loadFile(fileName) {
-			   httpObj = new XMLHttpRequest();
-			   httpObj.open('GET',fileName+"?"+(new Date()).getTime(),true);
-			   httpObj.send(null);
-			   httpObj.onreadystatechange = function(){
-			      if ( (httpObj.readyState == 4) && (httpObj.status == 200) ){
-			         var str = httpObj.responseText;
-			         var arr = str.split("\r\n");
+			loadFile = function (fileName) {
+				httpObj = new XMLHttpRequest();
+				httpObj.open('GET', fileName, true);
+				httpObj.send("");
+				httpObj.onreadystatechange = function(){
+					if ((httpObj.readyState === 4) && (httpObj.status === 200)){
+						var str = httpObj.responseText;
+						var arr = str.split("\r\n");
 
-			         for (i = 0; i < arr.length; i++)
-			         {
-			         	var ak = arr[i].split("	");
-			         	translatorL[ak[0]] = ak[1];
-			         	translatorR[ak[1]] = ak[0];
-			         }
-			         document.getElementById('state').innerHTML = "<span style=\"color: #00FF00;\">翻訳可能</span>";
-			      }
-			   }
+						for (i = 0; i < arr.length; i++)
+						{
+							var ak = arr[i].split("	");
+							translatorL[ak[0]] = ak[1];
+						}
+						document.getElementById('state').innerHTML = "<span style=\"color: #00FF00;\">翻訳可能</span>";
+					}
+				}
 			}
-			loadFile("http://Nucleareal.github.io/DiscordAlphabetTranslator/dict.txt");
+			loadFile("https://nucleareal.github.io/DiscordAlphabetTranslator/dict.txt");
 			
-			translateR = function() {
+			translateF = function() {
 				let result = "";
+				const estr = document.getElementById("alp").value.toUpperCase();
 				
-				[].forEach.call(document.getElementById("alp").value, function(s){
-					result += translatorR[s];
+				[].forEach.call(estr, function(s){
+					result += translatorL[s];
 				});
 				
-				document.getElementById("name").value = result;
+				document.getElementById("copystr").value = result;
 			}
 		</script>
 	</body>
