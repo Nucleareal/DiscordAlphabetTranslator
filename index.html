@@ -33,7 +33,7 @@
 				httpObj.onreadystatechange = function(){
 					if ((httpObj.readyState === 4) && (httpObj.status === 200)){
 						var str = httpObj.responseText;
-						var arr = str.split("\r\n");
+						var arr = str.split("\n");
 
 						for (i = 0; i < arr.length; i++)
 						{
@@ -50,11 +50,20 @@
 				let result = "";
 				const estr = document.getElementById("alp").value.toUpperCase();
 				
+				let failed = false;
+				
 				[].forEach.call(estr, function(s){
-					result += translatorL[s];
+					if(translatorL[s] != undefined){
+						result += translatorL[s] + " ";
+					} else {
+						failed = true;
+					}
 				});
 				
 				document.getElementById("copystr").value = result;
+				if(failed){
+					document.getElementById("copystr").value = "翻訳失敗";
+				}
 			}
 		</script>
 	</body>
