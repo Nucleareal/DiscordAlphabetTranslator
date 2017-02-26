@@ -26,3 +26,6 @@ Y	:regional_indicator_y:
 Z	:regional_indicator_z:
  	:space_invader:
 •”	:clubs:
+!	:exclamation:
+?	:question:
+*	::middle_finger:
